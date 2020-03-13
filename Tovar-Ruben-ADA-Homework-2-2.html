@@ -504,41 +504,151 @@ head(p)</code></pre>
 <p>###Now use the sample_n() function from {dplyr} to sample ONE subset of 30 zombie apocalypse survivors (without replacement) from this population and calculate the mean and sample standard deviation for each variable. Also estimate the standard error for each variable and construct the 95% confidence interval for each mean. You can use either the standard normal or a Student’s t distribution to derive the critical values needed to calculate the lower and upper limits of the CI.####</p>
 <pre><code>new_sample &lt;- sample_n(d, size = n)
 
-set.seed(30)
-n &lt;- 30
-s &lt;- sample_n(d, size = n, replace = FALSE) # `sample_n()` is from {dplyr} and selects rows at random from a data frame
+sset.seed(30)
+s &lt;- sample_n(d$height, size = 30, replace = FALSE)
+(m &lt;- mean(s))
+(sd &lt;- sd(d$height))
+(se &lt;- sd/sqrt(30))
+percent_ci &lt;- 95
+alpha &lt;- 1 - percent_ci / 100 # alpha = 0.05
+lower &lt;- m + qnorm(alpha / 2) * se</code></pre>
+<p>###where qnorm(alpha /2) is the 2.5% quantile of the standard normal distribution</p>
+<pre><code>upper &lt;- m + qnorm(1 - alpha / 2) * se</code></pre>
+<p>###where qnorm(1 - alpha / 2) is the 97.5% quantile of the standard normal distribution</p>
+<pre><code>ci &lt;- c(lower, upper)
+ci
+s2 &lt;- sample_n(d$weight, size = 30, replace = FALSE)
+(m &lt;- mean(s))
+(sd &lt;- sd(d$weight))
+(se &lt;- sd/sqrt(100))
+percent_ci &lt;- 95
+alpha &lt;- 1 - percent_ci / 100 # alpha = 0.05
+lower &lt;- m + qnorm(alpha / 2) * se</code></pre>
+<p>###where qnorm(alpha /2) is the 2.5% quantile of the standard normal distribution</p>
+<pre><code>upper &lt;- m + qnorm(1 - alpha / 2) * se</code></pre>
+<p>###where qnorm(1 - alpha / 2) is the 97.5% quantile of the standard normal distribution</p>
+<pre><code>ci2 &lt;- c(lower, upper)
+ci2
 
-h&lt;-d%&gt;%
-  sample_n(size = 30, replace = FALSE) %&gt;%
-mutate(mean=mean(height), sd=sd(height), SE=sd/sqrt(100))
+s3 &lt;- sample_n(d$age, size = 30, replace = FALSE)
+(m &lt;- mean(s))
+(sd &lt;- sd(d$age))
+(se &lt;- sd/sqrt(30))
+percent_ci &lt;- 95
+alpha &lt;- 1 - percent_ci / 100 # alpha = 0.05
+lower &lt;- m + qnorm(alpha / 2) * se</code></pre>
+<p>###where qnorm(alpha /2) is the 2.5% quantile of the standard normal distribution</p>
+<pre><code>upper &lt;- m + qnorm(1 - alpha / 2) * se</code></pre>
+<p>###where qnorm(1 - alpha / 2) is the 97.5% quantile of the standard normal distribution</p>
+<pre><code>ci3 &lt;- c(lower, upper)
+ci3
 
-w&lt;-d%&gt;%
-  sample_n(size = 30, replace = FALSE) %&gt;%
-  mutate(mean=mean(weight), sd=sd(weight), SE=sd/sqrt(100))
+s4 &lt;- sample_n(d$zombies_killed, size = 30, replace = FALSE)
+(m &lt;- mean(s))
+(sd &lt;- sd(d$zombies_killed))
+(se &lt;- sd/sqrt(30))
+percent_ci &lt;- 95
+alpha &lt;- 1 - percent_ci / 100 # alpha = 0.05
+lower &lt;- m + qnorm(alpha / 2) * se</code></pre>
+<p>###where qnorm(alpha /2) is the 2.5% quantile of the standard normal distribution</p>
+<pre><code>upper &lt;- m + qnorm(1 - alpha / 2) * se</code></pre>
+<p>###where qnorm(1 - alpha / 2) is the 97.5% quantile of the standard normal distribution</p>
+<pre><code>ci4 &lt;- c(lower, upper)
+ci4
 
-a&lt;-d%&gt;%
-  sample_n(size = 30, replace = FALSE) %&gt;%
-  mutate(mean=mean(weight), sd=sd(weight), SE=sd/sqrt(100))
-
-zk&lt;-d%&gt;%
-  sample_n(size = 30, replace = FALSE) %&gt;%
-mutate(mean=mean(zombies_killed), sd=sd(zombies_killed), SE=sd/sqrt(100))
-
-ye&lt;-d%&gt;%
-  sample_n(size = 30, replace = FALSE) %&gt;%
-mutate(mean=mean(years_of_education), sd=sd(years_of_education), SE=sd/sqrt(100))
-
-ye&lt;-
-  d %&gt;%
-  sample_n(size = 30, replace = FALSE) %&gt;%
-  mean(years_of_education) %&gt;%
-  sd(years_of_education) %&gt;%
-  SE=sd/sqrt(30)
-
-all&lt;-d %&gt;%
-reps &lt;- 1 %&gt;%
- do(reps) * mean(~height, data = sample_n(d, size = 30, replace = FALSE)) %&gt;%
-do(reps) * mean(~weight, data = sample_n(d, size = 30, replace = FALSE))</code></pre>
+s5 &lt;- sample_n(d$years_of_education, size = 30, replace = FALSE)
+(m &lt;- mean(s))
+(sd &lt;- sd(d$years_of_education))
+(se &lt;- sd/sqrt(30))
+percent_ci &lt;- 95
+alpha &lt;- 1 - percent_ci / 100 # alpha = 0.05
+lower &lt;- m + qnorm(alpha / 2) * se</code></pre>
+<p>###Now draw another 99 random samples of 30 zombie apocalypse survivors out and calculate the mean for each of the these samples. Together with the first sample you drew out, you now have a set of 100 means for each variable (each based on 30 observations), which constitutes a sampling distribution for each variable. What are the means and standard deviations of the sampling distribution for each variable? How do the standard deviations compare to the standard errors estimated in the question about and to those calculated using the population standard deviation? What do these sampling distributions look like? Are they normally distributed? What about for those variables that you concluded were not originally drawn from a normal distribution?</p>
+<p>###draw 99 more random samples of 30 zombies out</p>
+<pre><code>zsamp2&lt;-NULL
+zsamp2[[i]]&lt;-NULL
+for (i in c(1:99)) {
+  zomsamp2[[i]]&lt;- sample_n(d, 30, replace = TRUE)
+  }  
+  </code></pre>
+<p>###Calculate the means for each.</p>
+<pre><code>zsamp2&lt;-as.data.frame(zsamp2)
+znew&lt;-dplyr::select_if(zsamp2, is.numeric)
+znew&lt;-sapply(znew, mean) 
+znew&lt;-t(znew) 
+znew&lt;-as.data.frame(wow)
+zweight&lt;- znew[,grep(&quot;weight&quot;, colnames(wow))] 
+zweight 
+zheight&lt;-znew[,grep(&quot;height&quot;, colnames(wow))] 
+zheight 
+zage&lt;-znew[,grep(&quot;age&quot;, colnames(wow))] 
+zage 
+zkill&lt;-znew[,grep(&quot;zombies_killed&quot;, colnames(wow))] 
+zkill 
+zed&lt;-znew[,grep(&quot;years_of_education&quot;, colnames(wow))] 
+zed</code></pre>
+<p>###What are the means and standard deviations of the sampling distribution for each variable?</p>
+<pre><code>tzweight&lt;-sum(zsamp2[,grep(&quot;weight&quot;, colnames(zsamp2))]) + sum(new_sample$weight)
+tzheight&lt;-sum(zsamp2[,grep(&quot;height&quot;, colnames(zsamp2))]) + sum(new_sample$height) 
+tzomage&lt;-sum(zsamp2[,grep(&quot;age&quot;, colnames(zsamp2))]) + sum(new_sample$age) 
+tzkill&lt;-sum(zsamp2[,grep(&quot;zombies_killed&quot;, colnames(zsamp2))]) + sum(new_sample$zombies_killed)
+tzed&lt;-sum(zsamp2[,grep(&quot;years_of_education&quot;, colnames(zsamp2))]) + sum(new_sample$years_of_education)</code></pre>
+<div id="means-for-each-variable" class="section level3">
+<h3>Means for each variable</h3>
+<pre><code>#mean weight
+z1&lt;-(tzweight)/3000
+z1 
+#mean height
+z2&lt;-(tzheight)/3000
+z2 
+#mean age
+z3&lt;-(tzage)/3000
+z3 
+#mean zombies killed
+z4&lt;-(tzkill)/3000
+z4 
+#mean years educated
+z5&lt;-(tzed)/3000
+z5 #mean years educated</code></pre>
+<p>###Sd for each variable</p>
+<pre><code>tzweight2&lt;-cbind(zomsamp2[,grep(&quot;weight&quot;, colnames(zomsamp2))], zomsamp$weight) 
+tzheight2&lt;-cbind(zomsamp2[,grep(&quot;height&quot;, colnames(zomsamp2))], zomsamp$height)
+tzage2&lt;-cbind(zomsamp2[,grep(&quot;age&quot;, colnames(zomsamp2))], zomsamp$age)
+tzkill2&lt;-cbind(zomsamp2[,grep(&quot;zombies_killed&quot;, colnames(zomsamp2))], zomsamp$zombies_killed)
+tzed2&lt;-cbind(zomsamp2[,grep(&quot;years_of_education&quot;,colnames(zomsamp2))],
+zomsamp$years_of_education) </code></pre>
+<p>###gather into one matrix column</p>
+<pre><code>tzweight2&lt;-gather(tzomweight2)
+tzweight2&lt;-dplyr::select_if(tzomweight2, is.numeric)
+tzweight2&lt;-as.matrix(tzomweight2)
+tzheight2&lt;-gather(tzomheight2) 
+tzheight2&lt;-dplyr::select_if(tzomheight2, is.numeric)
+tzheight2&lt;-as.matrix(tzomheight2)
+tzage2&lt;-gather(tzomage2) 
+tzage2&lt;- dplyr::select_if(tzomage2, is.numeric)
+tzage2&lt;-as.matrix(tzomage2)
+tzkill2&lt;-gather(tzomzom2) 
+tzkill2&lt;- dplyr::select_if(tzomzom2, is.numeric)
+tzkill2&lt;-as.matrix(tzomzom2)
+tzed2&lt;-gather(tzomed2) 
+tzed2&lt;-  dplyr::select_if(tzomed2, is.numeric)
+tzed2&lt;-as.matrix(tzomed2)</code></pre>
+<p>###SD Function</p>
+<pre><code>zomsd &lt;- function(x) {
+  sqrt(sum((x - mean(x))^2)/100-1)
+}</code></pre>
+<p>###calculate sd for each variable</p>
+<pre><code>zsdw&lt;-zomsd(tzomweight2)
+zsdw 
+zsdh&lt;-zomsd(tzomheight2)
+zsdh 
+zsda&lt;-zomsd(tzomage2)
+zsda 
+zsdkill&lt;-zomsd(tzkill2)
+zsd 
+zsded&lt;-zomsd(tzed2)
+z </code></pre>
+</div>
 </div>
 
 
