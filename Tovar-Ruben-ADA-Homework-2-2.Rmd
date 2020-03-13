@@ -1,0 +1,271 @@
+---
+title: "Tovar-Ruben-ADA-Homework-2"
+author: "Ruben Tovar"
+date: "3/12/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```{r}
+
+
+```
+
+####HOMEWORK 2###
+
+###CHALLENGE_1####
+
+f<-(IMDB_movies)
+
+f
+
+g <- as_tibble(f)
+
+###Challenge 1.1###
+g2<- filter(g, startYear>=1920,startYear<=1979,runtimeMinutes<240) %>% mutate(decade=case_when(
+startYear>=1920 & startYear<1930 ~ "20",
+startYear>=1930 & startYear<1940 ~ "30",
+startYear>=1940 & startYear<1950 ~ "40",
+startYear>=1950 & startYear<1960 ~ "50",
+startYear>=1960 & startYear<1970 ~ "60",
+startYear>=1970 & startYear<1980 ~ "70"))
+
+g2
+
+###Challenge 1.2###
+p <- ggplot(data = g2, aes(x = runtimeMinutes)) + 
+geom_histogram() + facet_wrap(~decade, nrow=2)
+
+p
+
+###Challenge 1.3###
+results<-g2 %>%
+  group_by(decade) %>%
+mutate(mean=mean(runtimeMinutes), sd=sd(runtimeMinutes))
+
+
+###Challenge 1.4###
+newg<-g2 %>%
+  group_by(decade) %>%
+  sample_n(size=100) %>%
+mutate(mean=mean(runtimeMinutes), sd=sd(runtimeMinutes), SE=sd/sqrt(100))
+
+
+###Challenge 1.5###
+
+m<-g2 %>%
+  sample_n(size=100) %>%
+mutate(mean=mean(runtimeMinutes), sd=sd(runtimeMinutes), SE=sd/sqrt(100))
+
+
+###Challenge 1.6###
+
+m <-mean(g2$runtimeMinutes)
+k <- 10000 # number of samples
+n <- 100 # size of each sample
+s <- list(length = k) # create a dummy variable to hold each sample
+for (i in 1:k) {
+  s[[i]] <- sample(m, size = n, replace = FALSE)
+} 
+head(s)
+
+
+sd<-sd(g2$runtimeMinutes)
+k <- 10000 # number of samples
+n <- 100 # size of each sample
+s <- list(length = k) # create a dummy variable to hold each sample
+for (i in 1:k) {
+  s[[i]] <- sample(sd, size = n, replace = FALSE)
+} 
+
+head(s)
+
+
+###CHALLENGE 2###
+
+l = 18
+probset <- dpois(x = x, lambda = l)
+barplot(probset, names.arg = x, 
+        space = 0, xlab = "x", ylab = "Pr(X = x)", 
+        main = paste0("Probability Mass Function\nlambda = ", l))
+
+###What is the probability that she will hear 13 or fewer calls during any given session?###
+
+ppois(13,lambda=18)
+
+###What is the probability that she will hear no calls in a session?
+
+ppois(0,lambda=18)
+
+###What is the probability that she will hear exactly 7 calls in a session?
+
+dpois(7,18)
+
+###What is the probability that she will hear more than 20 calls in a session?
+
+1-ppois(20, lambda=18)
+
+###Plot the relevant Poisson mass function over the values in range 0 ≤  x ≤ 40. ≤ 
+
+y <- 0:40
+l = 18
+poisdist <- dpois(x = y, lambda = l)
+barplot(poisdist, names.arg = y, 
+        space = 0, xlab = "x", ylab = "Pr(X = x)", 
+        main = paste0("Probability Mass Function\nlambda = ", l))
+
+###Using the rpois() function, simulate 520 results from this distribution (i.e., 10 full years of Saturday monitoring sessions).
+
+sim<-rpois(520, l)
+
+###Plot the simulated results using the histogram() function from the {mosaic} package and use xlim() to set the horizontal limits to be from 0 to 40. How do your simulated results compare to the shape of the probability mass function you plotted above?
+
+hist(sim, xlim = c(0,40))
+
+y <- 0:40
+l = 18
+poisdist <- dpois(x = y, lambda = l)
+barplot(poisdist, names.arg = y, 
+        space = 0, xlab = "x", ylab = "Pr(X = x)", 
+        main = paste0("Probability Mass Function\nlambda = ", l))
+
+
+###CHALLENGE 3###
+
+library(curl)
+
+f <- curl("https://raw.githubusercontent.com/difiore/ADA-datasets/master/zombies.csv")
+d <- read_csv(f, col_names = TRUE) # creates a "tibble"
+
+###Calculate the population mean and standard deviation for each quantitative random variable (height, weight, age, number of zombies killed, and years of education).
+
+#####Mean
+(pop_mean_height <- mean(d$height)) 
+(pop_mean_weight <- mean(d$weight)) 
+(pop_mean_age <- mean(d$age)) 
+(pop_mean_zombies_killed <- mean(d$zombies_killed))
+(pop_mean_years_of_education <- mean(d$years_of_education)) 
+
+####Standard Deviations
+
+(pop_var_height <- var(d$height)) 
+(pop_var_weight <- var(d$weight)) 
+(pop_var_age <- var(d$age)) 
+(pop_var_zombies_killed <- var(d$zombies_killed))
+(pop_var_years_of_education <- var(d$years_of_education)) 
+
+###Use {ggplot2} and make scatterplots of height and weight in relation to age. Do these variables seem to be related? (YES) In what way? (LINEAR RELATIONSHIP)
+
+library(ggplot2)
+# Basic scatter plot height
+(h <- ggplot(d, aes(x=height, y=age)) + geom_point())
+# Basic scatter plot weight
+(w <- ggplot(d, aes(x=weight, y=age)) + geom_point())
+
+###Using histograms and Q-Q plots, check whether the quantitative variables seem to be drawn from a normal distribution. Which seem to be and which do not?
+
+###Histogram###
+histogram(d$height)
+histogram(d$weight)
+histogram(d$age)
+histogram(d$zombies_killed)
+histogram(d$years_of_education)
+
+###QQ Plot###
+qqnorm(d$years_of_education, main = "QQ Plot - Random Normal Variable")
+qqline(d$years_of_education, col = "gray")
+
+
+qqnorm(d$age, main = "QQ Plot - Random Normal Variable")
+qqline(d$age, col = "gray")
+
+ p<- ppoints(length(h)) # the `ppoints()` function generates evenly distributed points between 0 and 1
+
+head(p)
+
+###Now use the sample_n() function from {dplyr} to sample ONE subset of 30 zombie apocalypse survivors (without replacement) from this population and calculate the mean and sample standard deviation for each variable. Also estimate the standard error for each variable and construct the 95% confidence interval for each mean. You can use either the standard normal or a Student’s t distribution to derive the critical values needed to calculate the lower and upper limits of the CI.####
+
+```{r}
+new_sample <- sample_n(d, size = n)
+
+set.seed(30)
+n <- 30
+s <- sample_n(d, size = n, replace = FALSE) # `sample_n()` is from {dplyr} and selects rows at random from a data frame
+
+
+
+h<-d%>%
+  sample_n(size = 30, replace = FALSE) %>%
+mutate(mean=mean(height), sd=sd(height), SE=sd/sqrt(100))
+
+w<-d%>%
+  sample_n(size = 30, replace = FALSE) %>%
+  mutate(mean=mean(weight), sd=sd(weight), SE=sd/sqrt(100))
+
+a<-d%>%
+  sample_n(size = 30, replace = FALSE) %>%
+  mutate(mean=mean(weight), sd=sd(weight), SE=sd/sqrt(100))
+
+zk<-d%>%
+  sample_n(size = 30, replace = FALSE) %>%
+mutate(mean=mean(zombies_killed), sd=sd(zombies_killed), SE=sd/sqrt(100))
+
+ye<-d%>%
+  sample_n(size = 30, replace = FALSE) %>%
+mutate(mean=mean(years_of_education), sd=sd(years_of_education), SE=sd/sqrt(100))
+
+
+
+
+ye<-
+  d %>%
+  sample_n(size = 30, replace = FALSE) %>%
+  mean(years_of_education) %>%
+  sd(years_of_education) %>%
+  SE=sd/sqrt(30)
+
+all<-d %>%
+reps <- 1 %>%
+ do(reps) * mean(~height, data = sample_n(d, size = 30, replace = FALSE)) %>%
+do(reps) * mean(~weight, data = sample_n(d, size = 30, replace = FALSE))
+
+
+
+
+
+
+
+{r}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```
+
+
+
+```
