@@ -201,40 +201,193 @@ head(p)
 ```
 new_sample <- sample_n(d, size = n)
 
-set.seed(30)
-n <- 30
-s <- sample_n(d, size = n, replace = FALSE) # `sample_n()` is from {dplyr} and selects rows at random from a data frame
-
-h<-d%>%
-  sample_n(size = 30, replace = FALSE) %>%
-mutate(mean=mean(height), sd=sd(height), SE=sd/sqrt(100))
-
-w<-d%>%
-  sample_n(size = 30, replace = FALSE) %>%
-  mutate(mean=mean(weight), sd=sd(weight), SE=sd/sqrt(100))
-
-a<-d%>%
-  sample_n(size = 30, replace = FALSE) %>%
-  mutate(mean=mean(weight), sd=sd(weight), SE=sd/sqrt(100))
-
-zk<-d%>%
-  sample_n(size = 30, replace = FALSE) %>%
-mutate(mean=mean(zombies_killed), sd=sd(zombies_killed), SE=sd/sqrt(100))
-
-ye<-d%>%
-  sample_n(size = 30, replace = FALSE) %>%
-mutate(mean=mean(years_of_education), sd=sd(years_of_education), SE=sd/sqrt(100))
-
-ye<-
-  d %>%
-  sample_n(size = 30, replace = FALSE) %>%
-  mean(years_of_education) %>%
-  sd(years_of_education) %>%
-  SE=sd/sqrt(30)
-
-all<-d %>%
-reps <- 1 %>%
- do(reps) * mean(~height, data = sample_n(d, size = 30, replace = FALSE)) %>%
-do(reps) * mean(~weight, data = sample_n(d, size = 30, replace = FALSE))
+sset.seed(30)
+s <- sample_n(d$height, size = 30, replace = FALSE)
+(m <- mean(s))
+(sd <- sd(d$height))
+(se <- sd/sqrt(30))
+percent_ci <- 95
+alpha <- 1 - percent_ci / 100 # alpha = 0.05
+lower <- m + qnorm(alpha / 2) * se
 ```
+
+###where qnorm(alpha /2) is the 2.5% quantile of the standard normal distribution
+```
+upper <- m + qnorm(1 - alpha / 2) * se
+```
+###where qnorm(1 - alpha / 2) is the 97.5% quantile of the standard normal distribution
+```
+ci <- c(lower, upper)
+ci
+s2 <- sample_n(d$weight, size = 30, replace = FALSE)
+(m <- mean(s))
+(sd <- sd(d$weight))
+(se <- sd/sqrt(100))
+percent_ci <- 95
+alpha <- 1 - percent_ci / 100 # alpha = 0.05
+lower <- m + qnorm(alpha / 2) * se
+```
+###where qnorm(alpha /2) is the 2.5% quantile of the standard normal distribution
+```
+upper <- m + qnorm(1 - alpha / 2) * se
+```
+###where qnorm(1 - alpha / 2) is the 97.5% quantile of the standard normal distribution
+```
+ci2 <- c(lower, upper)
+ci2
+
+s3 <- sample_n(d$age, size = 30, replace = FALSE)
+(m <- mean(s))
+(sd <- sd(d$age))
+(se <- sd/sqrt(30))
+percent_ci <- 95
+alpha <- 1 - percent_ci / 100 # alpha = 0.05
+lower <- m + qnorm(alpha / 2) * se
+```
+###where qnorm(alpha /2) is the 2.5% quantile of the standard normal distribution
+```
+upper <- m + qnorm(1 - alpha / 2) * se
+```
+###where qnorm(1 - alpha / 2) is the 97.5% quantile of the standard normal distribution
+```
+ci3 <- c(lower, upper)
+ci3
+
+s4 <- sample_n(d$zombies_killed, size = 30, replace = FALSE)
+(m <- mean(s))
+(sd <- sd(d$zombies_killed))
+(se <- sd/sqrt(30))
+percent_ci <- 95
+alpha <- 1 - percent_ci / 100 # alpha = 0.05
+lower <- m + qnorm(alpha / 2) * se
+```
+###where qnorm(alpha /2) is the 2.5% quantile of the standard normal distribution
+```
+upper <- m + qnorm(1 - alpha / 2) * se
+```
+###where qnorm(1 - alpha / 2) is the 97.5% quantile of the standard normal distribution
+```
+ci4 <- c(lower, upper)
+ci4
+
+s5 <- sample_n(d$years_of_education, size = 30, replace = FALSE)
+(m <- mean(s))
+(sd <- sd(d$years_of_education))
+(se <- sd/sqrt(30))
+percent_ci <- 95
+alpha <- 1 - percent_ci / 100 # alpha = 0.05
+lower <- m + qnorm(alpha / 2) * se
+```
+###Now draw another 99 random samples of 30 zombie apocalypse survivors out and calculate the mean for each of the these samples. Together with the first sample you drew out, you now have a set of 100 means for each variable (each based on 30 observations), which constitutes a sampling distribution for each variable. What are the means and standard deviations of the sampling distribution for each variable? How do the standard deviations compare to the standard errors estimated in the question about and to those calculated using the population standard deviation? What do these sampling distributions look like? Are they normally distributed? What about for those variables that you concluded were not originally drawn from a normal distribution?
+
+###draw 99 more random samples of 30 zombies out
+```
+zsamp2<-NULL
+zsamp2[[i]]<-NULL
+for (i in c(1:99)) {
+  zomsamp2[[i]]<- sample_n(d, 30, replace = TRUE)
+  }  
+  
+```
+###Calculate the means for each.
+```
+zsamp2<-as.data.frame(zsamp2)
+znew<-dplyr::select_if(zsamp2, is.numeric)
+znew<-sapply(znew, mean) 
+znew<-t(znew) 
+znew<-as.data.frame(wow)
+zweight<- znew[,grep("weight", colnames(wow))] 
+zweight 
+zheight<-znew[,grep("height", colnames(wow))] 
+zheight 
+zage<-znew[,grep("age", colnames(wow))] 
+zage 
+zkill<-znew[,grep("zombies_killed", colnames(wow))] 
+zkill 
+zed<-znew[,grep("years_of_education", colnames(wow))] 
+zed
+```
+
+###What are the means and standard deviations of the sampling
+distribution for each variable?
+```
+tzweight<-sum(zsamp2[,grep("weight", colnames(zsamp2))]) + sum(new_sample$weight)
+tzheight<-sum(zsamp2[,grep("height", colnames(zsamp2))]) + sum(new_sample$height) 
+tzomage<-sum(zsamp2[,grep("age", colnames(zsamp2))]) + sum(new_sample$age) 
+tzkill<-sum(zsamp2[,grep("zombies_killed", colnames(zsamp2))]) + sum(new_sample$zombies_killed)
+tzed<-sum(zsamp2[,grep("years_of_education", colnames(zsamp2))]) + sum(new_sample$years_of_education)
+```
+### Means for each variable
+
+```
+#mean weight
+z1<-(tzweight)/3000
+z1 
+#mean height
+z2<-(tzheight)/3000
+z2 
+#mean age
+z3<-(tzage)/3000
+z3 
+#mean zombies killed
+z4<-(tzkill)/3000
+z4 
+#mean years educated
+z5<-(tzed)/3000
+z5 #mean years educated
+```
+
+###Sd for each variable
+```
+tzweight2<-cbind(zomsamp2[,grep("weight", colnames(zomsamp2))], zomsamp$weight) 
+tzheight2<-cbind(zomsamp2[,grep("height", colnames(zomsamp2))], zomsamp$height)
+tzage2<-cbind(zomsamp2[,grep("age", colnames(zomsamp2))], zomsamp$age)
+tzkill2<-cbind(zomsamp2[,grep("zombies_killed", colnames(zomsamp2))], zomsamp$zombies_killed)
+tzed2<-cbind(zomsamp2[,grep("years_of_education",colnames(zomsamp2))],
+zomsamp$years_of_education) 
+```
+###gather into one matrix column
+```
+tzweight2<-gather(tzomweight2)
+tzweight2<-dplyr::select_if(tzomweight2, is.numeric)
+tzweight2<-as.matrix(tzomweight2)
+tzheight2<-gather(tzomheight2) 
+tzheight2<-dplyr::select_if(tzomheight2, is.numeric)
+tzheight2<-as.matrix(tzomheight2)
+tzage2<-gather(tzomage2) 
+tzage2<- dplyr::select_if(tzomage2, is.numeric)
+tzage2<-as.matrix(tzomage2)
+tzkill2<-gather(tzomzom2) 
+tzkill2<- dplyr::select_if(tzomzom2, is.numeric)
+tzkill2<-as.matrix(tzomzom2)
+tzed2<-gather(tzomed2) 
+tzed2<-  dplyr::select_if(tzomed2, is.numeric)
+tzed2<-as.matrix(tzomed2)
+```
+###SD Function
+```
+zomsd <- function(x) {
+  sqrt(sum((x - mean(x))^2)/100-1)
+}
+```
+###calculate sd for each variable
+```
+zsdw<-zomsd(tzomweight2)
+zsdw 
+zsdh<-zomsd(tzomheight2)
+zsdh 
+zsda<-zomsd(tzomage2)
+zsda 
+zsdkill<-zomsd(tzkill2)
+zsd 
+zsded<-zomsd(tzed2)
+z 
+```
+
+
+
+
+
+
+
 
