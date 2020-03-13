@@ -384,10 +384,3 @@ zsded<-zomsd(tzed2)
 z 
 ```
 
-
-
-
-
-
-
-
